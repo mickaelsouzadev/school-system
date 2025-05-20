@@ -13,46 +13,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mickaelsouza.schoolsystem.model.User;
-import com.mickaelsouza.schoolsystem.service.StudentService;
+import com.mickaelsouza.schoolsystem.service.TeacherService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api/teachers")
 @RequiredArgsConstructor
-public class StudentController {
-    private final StudentService studentService;
+public class TeacherController {
+    private final TeacherService teacherService;
 
     @GetMapping
     public ResponseEntity<List<User>> list() {
-        return ResponseEntity.ok(studentService.findAll());
+        return ResponseEntity.ok(teacherService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<User> createStudent(@RequestBody User student) {
-        return ResponseEntity.ok(studentService.create(student));
+    public ResponseEntity<User> createTeacher(@RequestBody User teacher) {
+        return ResponseEntity.ok(teacherService.create(teacher));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getStudentById(@PathVariable Long id) {
-        return studentService.findById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<User> getTeacherById(@PathVariable Long id) {
+        return teacherService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable Long id, @RequestBody User updated) {
-        return ResponseEntity.ok(studentService.update(id, updated));
+    public ResponseEntity<?> updateTeacher(@PathVariable Long id, @RequestBody User updated) {
+        return ResponseEntity.ok(teacherService.update(id, updated));
     }
 
     @PutMapping("/password/{id}")
     public ResponseEntity<?> updatePassword(@PathVariable Long id, @RequestBody User updated) {
-        return ResponseEntity.ok(studentService.updatePassword(id, updated));
+        return ResponseEntity.ok(teacherService.updatePassword(id, updated));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
-        studentService.delete(id);
+    public ResponseEntity<?> deleteTeacher(@PathVariable Long id) {
+        teacherService.delete(id);
         return ResponseEntity.ok().build();
     }
 }

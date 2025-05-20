@@ -20,7 +20,7 @@ public class Grade {
     private Double value;
 
     @ManyToOne
-    private Student student;
+    private User student;
 
     @ManyToOne
     private Subject subject;
