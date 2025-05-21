@@ -17,31 +17,43 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.authentication.BadCredentialsException;
 
-@AllArgsConstructor
+
 @Service
 public class AuthenticationService {
 
-    private AuthenticationManager authenticationManager;
-    private JwtUtil jwtUtil;
-    private UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+
+    public AuthenticationService(
+            AuthenticationManager authenticationManager,
+            JwtUtil jwtUtil,
+            UserRepository userRepository) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
+    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(), request.getPassword()));
 
             User user = userRepository.findByEmail(request.getEmail())
-                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-            
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
             String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
-            return new AuthenticationResponse(token);
+            return new AuthenticationResponse(token, user.getName(), user.getRole().name());
 
         } catch (AuthenticationException e) {
-            throw new RuntimeException(e.getMessage());
+           throw new BadCredentialsException("Usuário ou senha incorretos");
         }
     }
 }

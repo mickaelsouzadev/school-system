@@ -2,6 +2,8 @@ package com.mickaelsouza.schoolsystem.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -28,6 +30,7 @@ public class Subject {
     @JoinColumn(name = "teacher_id")
     private User teacher;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "subject_students", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<User> students;

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mickaelsouza.schoolsystem.model.Subject;
-import com.mickaelsouza.schoolsystem.model.Subject;
 import com.mickaelsouza.schoolsystem.service.SubjectService;
 
 import lombok.RequiredArgsConstructor;
